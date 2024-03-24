@@ -1,10 +1,14 @@
 package org.purpurmc.purformance;
 
+import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.builder.CommandData;
+import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
@@ -12,8 +16,6 @@ import net.minestom.server.ping.ResponseData;
 import org.purpurmc.purformance.commands.StopCommand;
 import org.purpurmc.purformance.commands.TpsCommand;
 import org.purpurmc.purformance.config.ServerProperties;
-
-import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +72,33 @@ public class Server extends Thread {
         double elapsedSeconds = (currentTime - serverStartTime) / 1000.0;
         String formattedTime = String.format("%.3fs", elapsedSeconds);
         logger.info("Done (%s)! To get help, just try harder.".formatted(formattedTime));
+
+        processCommands();
+    }
+
+    private void processCommands() {
+        CommandManager commandManager = MinecraftServer.getCommandManager();
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNextLine()) {
+            String command = scanner.nextLine();
+            if (command.isBlank() || command.isEmpty()) {
+                continue;
+            }
+
+            CommandResult result = commandManager.executeServerCommand(command);
+
+            switch (result.getType()) {
+                case UNKNOWN -> logger.info("%s has been disabled to increase performance".formatted(command));
+                case SUCCESS -> {
+                    CommandData data = result.getCommandData();
+
+                    if (data != null && data.has("message")) {
+                        logger.info((String) data.get("message"));
+                    }
+                }
+            }
+        }
     }
 
 }
