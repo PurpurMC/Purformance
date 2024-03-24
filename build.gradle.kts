@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation("com.github.Minestom:Minestom:17fd82a5c1")
+    implementation("org.slf4j:slf4j-reload4j:2.0.12")
 }
 
 application {

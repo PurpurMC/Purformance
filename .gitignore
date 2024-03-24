@@ -10,3 +10,4 @@ data/
 dependency-reduced-pom.xml
 .gradle
 build
+logs

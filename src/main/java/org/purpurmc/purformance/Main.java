@@ -9,29 +9,24 @@ import org.purpurmc.purformance.config.Eula;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 
-    public static final Logger logger = Logger.getLogger("Purformance");
+    public static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final Server server = new Server();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        Thread.currentThread().setName("ServerMain");
 
-        long serverStartTime = System.currentTimeMillis();
-
-        if (!Eula.checkEula()) {
-            logger.severe("You need to accept the eula!");
+        if (Eula.checkEula()) {
+            logger.error("You need to accept the eula!");
             System.exit(1);
         }
 
         server.start();
         server.initialized.get();
-
-        long currentTime = System.currentTimeMillis();
-        double elapsedSeconds = (currentTime - serverStartTime) / 1000.0;
-        String formattedTime = String.format("%.3fs", elapsedSeconds);
-        logger.info("Done (%s)! To get help, just try harder.".formatted(formattedTime));
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         Scanner scanner = new Scanner(System.in);

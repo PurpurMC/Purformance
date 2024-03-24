@@ -32,7 +32,7 @@ public class Eula {
                     Files.copy(eulaStream, eulaFilePath, StandardCopyOption.REPLACE_EXISTING);
                 }
             } catch (IOException e) {
-                Main.logger.severe("Could not create eula file. Exiting.");
+                Main.logger.error("Could not create eula file. Exiting.");
                 e.printStackTrace();
                 System.exit(1);
             }
@@ -45,7 +45,7 @@ public class Eula {
         try (Stream<String> lines = Files.lines(eulaFilePath)) {
             return lines.anyMatch(line -> line.trim().equalsIgnoreCase("eula=true"));
         } catch (IOException e) {
-            Main.logger.severe("Could not read eula file. Exiting.");
+            Main.logger.error("Could not read eula file. Exiting.");
             e.printStackTrace();
             System.exit(1);
             return false;

@@ -14,10 +14,13 @@ import org.purpurmc.purformance.commands.TpsCommand;
 import org.purpurmc.purformance.config.ServerProperties;
 
 import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Server extends Thread {
 
     public static ServerProperties serverProperties;
+    public static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public final CompletableFuture<Void> initialized = new CompletableFuture<>();
 
@@ -27,11 +30,16 @@ public class Server extends Thread {
             .append(Component.text("Player joining has been disabled to increase performance, try again later.").color(NamedTextColor.WHITE).decorate(TextDecoration.ITALIC))
             .build();
 
+    public Server() {
+        super("Server thread");
+    }
+
     @Override
     public void run() {
         serverProperties = new ServerProperties();
 
         // todo: logging like minecraft console
+        long serverStartTime = System.currentTimeMillis();
 
         MinecraftServer server = MinecraftServer.init();
         MinecraftServer.setBrandName("Purformance");
@@ -57,6 +65,11 @@ public class Server extends Thread {
 
         initialized.complete(null);
         server.start(serverProperties.ip, serverProperties.port);
+
+        long currentTime = System.currentTimeMillis();
+        double elapsedSeconds = (currentTime - serverStartTime) / 1000.0;
+        String formattedTime = String.format("%.3fs", elapsedSeconds);
+        logger.info("Done (%s)! To get help, just try harder.".formatted(formattedTime));
     }
 
 }
