@@ -58,9 +58,7 @@ public class Server extends Thread {
             event.setResponseData(data);
         });
 
-        eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            event.getPlayer().kick(kickMessage);
-        });
+        eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> event.getPlayer().kick(kickMessage));
 
         commandManager.register(new StopCommand());
         commandManager.register(new TpsCommand());
@@ -94,7 +92,7 @@ public class Server extends Thread {
                     CommandData data = result.getCommandData();
 
                     if (data != null && data.has("message")) {
-                        logger.info((String) data.get("message"));
+                        logger.info(data.get("message"));
                     }
                 }
             }
