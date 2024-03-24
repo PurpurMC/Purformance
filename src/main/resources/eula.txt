@@ -1,0 +1,4 @@
+PurpurMC is not responsible for any physical, mental or emotional damage caused by this software.
+Before setting this value to true, you must do 15 burpees. Please note that this is legally enforceable.
+
+eula=false
