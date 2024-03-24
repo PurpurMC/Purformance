@@ -1,4 +1,6 @@
-package org.purpurmc.purformance;
+package org.purpurmc.purformance.config;
+
+import org.purpurmc.purformance.Main;
 
 import java.io.File;
 import java.nio.file.Files;

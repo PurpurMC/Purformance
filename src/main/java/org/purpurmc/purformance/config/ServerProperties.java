@@ -1,6 +1,7 @@
-package org.purpurmc.purformance;
+package org.purpurmc.purformance.config;
 
 import net.kyori.adventure.text.Component;
+import org.purpurmc.purformance.Main;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,7 +19,7 @@ public class ServerProperties {
     public final int port;
     public final boolean fastMode;
 
-    protected ServerProperties() throws RuntimeException {
+    public ServerProperties() throws RuntimeException {
         initProperties();
         String jarPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
         Path propertiesFilePath = Paths.get(jarPath, PROPERTIES_FILE_NAME);

@@ -4,10 +4,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.ResponseData;
+import org.purpurmc.purformance.commands.StopCommand;
+import org.purpurmc.purformance.commands.TpsCommand;
+import org.purpurmc.purformance.config.ServerProperties;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -33,6 +37,8 @@ public class Server extends Thread {
         MinecraftServer.setBrandName("Purformance");
 
         GlobalEventHandler eventHandler = MinecraftServer.getGlobalEventHandler();
+        CommandManager commandManager = MinecraftServer.getCommandManager();
+
         eventHandler.addListener(ServerListPingEvent.class, event -> {
             ResponseData data = new ResponseData();
             data.setDescription(serverProperties.motd);
@@ -45,6 +51,9 @@ public class Server extends Thread {
         eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.getPlayer().kick(kickMessage);
         });
+
+        commandManager.register(new StopCommand());
+        commandManager.register(new TpsCommand());
 
         initialized.complete(null);
         server.start(serverProperties.ip, serverProperties.port);
