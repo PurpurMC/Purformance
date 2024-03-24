@@ -11,7 +11,7 @@ public class Main {
     private static final Server server = new Server();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Thread.currentThread().setName("ServerMain");
+        Thread.currentThread().setName("ServerMain"); // TODO: specify through log4j.xml instead
 
         if (Eula.checkEula()) {
             logger.error("You need to accept the eula!");

@@ -33,7 +33,7 @@ public class Server extends Thread {
             .build();
 
     public Server() {
-        super("Server thread");
+        super("Server thread"); // TODO: specify through log4j.xml instead? (could probably stay :shrug:)
     }
 
     @Override
