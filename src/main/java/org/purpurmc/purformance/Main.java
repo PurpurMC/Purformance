@@ -10,9 +10,11 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.ResponseData;
 
 public class Main {
-    private static final Component kickMessage = Component.text("Purformance:").color(NamedTextColor.RED).decorate(TextDecoration.BOLD)
+    private static final Component kickMessage = Component.text()
+            .append(Component.text("Purformance:").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
             .append(Component.newline()).append(Component.newline())
-            .append(Component.text("Player joining has been disabled to increase performance, try again later.").decorate(TextDecoration.ITALIC));
+            .append(Component.text("Player joining has been disabled to increase performance, try again later.").color(NamedTextColor.WHITE).decorate(TextDecoration.ITALIC))
+            .build();
 
     private static Component motd;
 

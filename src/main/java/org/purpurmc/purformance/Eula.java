@@ -8,7 +8,7 @@ public class Eula {
             initEula();
         }
 
-        
+        return true; // todo
     }
 
     private static void initEula() {
