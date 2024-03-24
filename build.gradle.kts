@@ -1,5 +1,10 @@
 plugins {
+    application
     java
+}
+
+application {
+    mainClass.value("org.purpurmc.purformance.App")
 }
 
 java {
