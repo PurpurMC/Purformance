@@ -33,6 +33,10 @@ public class Main {
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
+            if (command.isBlank() || command.isEmpty()) {
+                continue;
+            }
+
             CommandResult result = commandManager.executeServerCommand(command);
 
             switch (result.getType()) {
