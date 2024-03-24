@@ -15,13 +15,13 @@ public class Main {
 
     public static final Logger logger = Logger.getLogger("Purformance");
 
+    public static ServerProperties serverProperties;
+
     private static final Component kickMessage = Component.text()
             .append(Component.text("Purformance:").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
             .append(Component.newline()).append(Component.newline())
             .append(Component.text("Player joining has been disabled to increase performance, try again later.").color(NamedTextColor.WHITE).decorate(TextDecoration.ITALIC))
             .build();
-
-    private static Component motd;
 
     public static void main(String[] args) {
 
@@ -32,20 +32,20 @@ public class Main {
             System.exit(1);
         }
 
-        motd = Component.text("Purformance Server");
-        // todo: eula & server.properties
+        serverProperties = new ServerProperties();
+
         // todo: logging like minecraft console
 
         MinecraftServer server = MinecraftServer.init();
+        MinecraftServer.setBrandName("Purformance");
 
         GlobalEventHandler eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addListener(ServerListPingEvent.class, event -> {
             ResponseData data = new ResponseData();
-
-            data.setPlayersHidden(true);
-            data.setProtocol(765); // 1.20.4 todo: do we want to do like 1.8 or something
-            data.setDescription(motd); // todo
-
+            data.setDescription(serverProperties.motd);
+            data.setProtocol(serverProperties.fastMode ? 47 : 765);
+            data.setVersion(serverProperties.fastMode ? "1.8.8" : "1.20.4");
+            data.setMaxPlayer(Integer.MAX_VALUE);
             event.setResponseData(data);
         });
 
@@ -53,12 +53,11 @@ public class Main {
             event.getPlayer().kick(kickMessage);
         });
 
-        server.start("0.0.0.0", 25565);
+        server.start(serverProperties.ip, serverProperties.port);
         long currentTime = System.currentTimeMillis();
         double elapsedSeconds = (currentTime - serverStartTime) / 1000.0;
         String formattedTime = String.format("%.3fs", elapsedSeconds);
         logger.info("Done (%s)! To get help, just try harder.".formatted(formattedTime));
-
 
     }
 }
