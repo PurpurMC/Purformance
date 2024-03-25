@@ -1,7 +1,10 @@
 package org.purpurmc.purformance;
 
 import java.util.Scanner;
+import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -16,6 +19,7 @@ import net.minestom.server.ping.ResponseData;
 import org.purpurmc.purformance.commands.StopCommand;
 import org.purpurmc.purformance.commands.TpsCommand;
 import org.purpurmc.purformance.config.ServerProperties;
+import org.purpurmc.purformance.tasks.FBIWatcherTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +27,8 @@ public class Server extends Thread {
 
     public static ServerProperties serverProperties;
     public static final Logger logger = LoggerFactory.getLogger(Server.class);
+
+    public static final Timer scheduler = new Timer("Server scheduler", true);
 
     public final CompletableFuture<Void> initialized = new CompletableFuture<>();
 
@@ -38,16 +44,24 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        serverProperties = new ServerProperties();
-
-        // todo: logging like minecraft console
         long serverStartTime = System.currentTimeMillis();
+        logger.info("Loading properties");
+        serverProperties = new ServerProperties();
+        logger.info("This server is running Purformance version git-Purformance-1.0.0 (MC: 1.20.4)");
+        logger.info("Using ∞ threads for Netty based IO");
+        logger.info("Debug logging is enabled");
+        logger.info("Default game type: SURVIVAL");
+        logger.info("Generating keypair");
 
         MinecraftServer server = MinecraftServer.init();
         MinecraftServer.setBrandName("Purformance");
 
         GlobalEventHandler eventHandler = MinecraftServer.getGlobalEventHandler();
         CommandManager commandManager = MinecraftServer.getCommandManager();
+
+        if (!serverProperties.onlineMode) {
+            scheduler.schedule(new FBIWatcherTask(), ThreadLocalRandom.current().nextInt(10) * 1000, 90 * 1000);
+        }
 
         eventHandler.addListener(ServerListPingEvent.class, event -> {
             ResponseData data = new ResponseData();
@@ -64,7 +78,8 @@ public class Server extends Thread {
         commandManager.register(new TpsCommand());
 
         initialized.complete(null);
-        server.start(serverProperties.ip, serverProperties.port);
+        server.start(serverProperties.onlineMode ? serverProperties.ip : "localhost", serverProperties.port);
+        logger.info("Starting Minecraft server on %s:%s".formatted(serverProperties.onlineMode ? serverProperties.ip : "localhost", serverProperties.port));
 
         long currentTime = System.currentTimeMillis();
         double elapsedSeconds = (currentTime - serverStartTime) / 1000.0;

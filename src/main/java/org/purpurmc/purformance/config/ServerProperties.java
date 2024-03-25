@@ -17,7 +17,7 @@ public class ServerProperties {
     public final String ip;
     public final Component motd;
     public final int port;
-    public final boolean fastMode;
+    public final boolean fastMode, onlineMode;
 
     public ServerProperties() throws RuntimeException {
         initProperties();
@@ -30,6 +30,7 @@ public class ServerProperties {
             this.port = Integer.parseInt(serverProperties.getProperty("port", String.valueOf(25565)));
             this.motd = Component.text(serverProperties.getProperty("motd", "Purformance server"));
             this.fastMode = Boolean.parseBoolean(serverProperties.getProperty("fast-mode", "false"));
+            this.onlineMode = Boolean.parseBoolean(serverProperties.getProperty("online-mode", "true"));
         } catch (IOException | NumberFormatException e) {
             throw new RuntimeException("Failed to read server.properties", e);
         }
