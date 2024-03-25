@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         Thread.currentThread().setName("ServerMain"); // TODO: specify through log4j.xml instead
 
-        if (Eula.checkEula()) {
+        if (!Eula.checkEula()) {
             logger.error("You need to accept the eula!");
             System.exit(1);
         }
