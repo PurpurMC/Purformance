@@ -44,8 +44,7 @@ public class ServerProperties {
                     Files.copy(propertiesStream, propertiesFilePath, StandardCopyOption.REPLACE_EXISTING);
                 }
             } catch (IOException e) {
-                Main.logger.error("Could not create server.properties file. Exiting.");
-                e.printStackTrace();
+                Main.logger.error("Could not create server.properties file. Exiting.", e);
                 System.exit(1);
             }
         }
