@@ -1,6 +1,8 @@
 package org.purpurmc.purformance;
 
 import java.util.concurrent.ExecutionException;
+
+import net.minestom.server.MinecraftServer;
 import org.purpurmc.purformance.config.Eula;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static final Server server = new Server();
+    protected static final Server server = new Server();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         Thread.currentThread().setName("ServerMain"); // TODO: specify through log4j.xml instead
@@ -19,6 +21,8 @@ public class Main {
         }
 
         server.start();
-        server.initialized.get();
+        server.started.get();
+
+        new Console().start();
     }
 }

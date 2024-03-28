@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration name="Console">
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleTerminal"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+
+    <Appenders>
+        <TerminalConsole name="ConsoleTerminal">
+            <PatternLayout pattern="%highlightError{[%d{HH:mm:ss} %p]: %minecraftFormatting{%msg}%n}" />
+        </TerminalConsole>
+
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" >
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%p]: %msg%n"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+</Configuration>

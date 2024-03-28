@@ -19,7 +19,14 @@ repositories {
 
 dependencies {
     implementation("com.github.Minestom:Minestom:17fd82a5c1")
-    implementation("org.slf4j:slf4j-reload4j:2.0.12")
+
+    implementation("org.slf4j:slf4j-api:2.0.12")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
+
+    implementation("org.jline:jline-terminal:3.21.0")
+    implementation("org.jline:jline-reader:3.21.0")
+
+    implementation("net.minecrell:terminalconsoleappender:1.3.0")
 }
 
 application {

@@ -13,9 +13,6 @@ public class TpsCommand extends Command {
 
     public TpsCommand() {
         super("tps", "mspt");
-
-        setDefaultExecutor((sender, context) -> {
-            context.setReturnData(CommandResponse.message(tpsResponse));
-        });
+        setDefaultExecutor((sender, context) -> MinecraftServer.LOGGER.info(tpsResponse));
     }
 }
