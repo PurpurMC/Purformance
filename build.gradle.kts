@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+
 plugins {
     java
     application
@@ -18,13 +20,13 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.Minestom:Minestom:17fd82a5c1")
+    implementation("com.github.Minestom:Minestom:f09d3db999")
 
-    implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("org.slf4j:slf4j-simple:2.0.12")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
 
-    implementation("org.jline:jline-terminal:3.21.0")
-    implementation("org.jline:jline-reader:3.21.0")
+    implementation("org.jline:jline-terminal-jansi:3.21.0")
 
     implementation("net.minecrell:terminalconsoleappender:1.3.0")
 }
@@ -33,8 +35,16 @@ application {
     mainClass.value("org.purpurmc.purformance.Main")
 }
 
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "org.purpurmc.purformance.Main"
+tasks {
+    withType<Jar> {
+        manifest {
+            attributes["Main-Class"] = "org.purpurmc.purformance.Main"
+        }
+    }
+
+    shadowJar {
+        transform(Log4j2PluginsCacheFileTransformer::class.java)
     }
 }
+
+

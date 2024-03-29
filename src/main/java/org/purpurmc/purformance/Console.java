@@ -1,10 +1,14 @@
 package org.purpurmc.purformance;
 
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
+import net.minecrell.terminalconsole.TerminalConsoleAppender;
 import net.minestom.server.MinecraftServer;
-import org.slf4j.Logger;
 
 public class Console extends SimpleTerminalConsole {
+
+    public Console() {
+        TerminalConsoleAppender.isAnsiSupported();
+    }
 
     @Override
     protected boolean isRunning() {
@@ -13,7 +17,7 @@ public class Console extends SimpleTerminalConsole {
 
     @Override
     protected void runCommand(String command) {
-        MinecraftServer.getCommandManager().executeServerCommand(command);
+        MinecraftServer.getCommandManager().execute(MinecraftServer.getCommandManager().getConsoleSender(), command);
     }
 
     @Override

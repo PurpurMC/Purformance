@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
@@ -37,7 +36,7 @@ public class Server extends Thread {
             .build();
 
     public Server() {
-        super("Server thread"); // TODO: specify through log4j.xml instead? (could probably stay :shrug:)
+        super("Server thread"); // TODO: specify through log4j2.xml instead? (could probably stay :shrug:)
     }
 
     @Override
@@ -45,7 +44,7 @@ public class Server extends Thread {
         long serverStartTime = System.currentTimeMillis();
         logger.info("Loading properties");
         serverProperties = new ServerProperties();
-        logger.info("This server is running Purformance version git-Purformance-1.0.0 (MC: 1.20.4)");
+        logger.info("This server is running Purformance version git-Purformance-1.0.0 (MC: %s)".formatted(serverProperties.fastMode ? "1.8.8" : "1.20.4"));
         logger.info("Using ∞ threads for Netty based IO");
         logger.info("Debug logging is enabled");
         logger.info("Default game type: SURVIVAL");
@@ -70,11 +69,12 @@ public class Server extends Thread {
             event.setResponseData(data);
         });
 
-        eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> event.getPlayer().kick(kickMessage));
-
-        commandManager.setUnknownCommandCallback((sender, command) -> {
-            sender.sendMessage("%s has been disabled to increase performance".formatted(command));
+        eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
+            logger.info("%s attempted to connect to the server".formatted(event.getPlayer().getUsername()));
+            event.getPlayer().kick(kickMessage);
         });
+
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("%s has been disabled to increase performance".formatted(command)));
 
         commandManager.register(new StopCommand());
         commandManager.register(new TpsCommand());
@@ -89,14 +89,18 @@ public class Server extends Thread {
         logger.info("Done (%s)! To get help, just try harder.".formatted(formattedTime));
     }
 
-    protected void shutdown() {
-        logger.info("Shutting down server...");
+    public void shutdown() {
+        logger.info("Stopping the server");
+        logger.info("Saving players");
+        logger.info("Flushing Chunk IO");
+        logger.info("Closing Thread Pool");
+        logger.info("Closing server");
 
         try {
             MinecraftServer.stopCleanly();
             System.exit(0);
         } catch (Throwable t) {
-            t.printStackTrace();
+            logger.error("Failed to shut down cleanly", t);
             System.exit(1);
         }
     }
