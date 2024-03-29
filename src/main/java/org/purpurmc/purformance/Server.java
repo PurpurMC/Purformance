@@ -9,6 +9,7 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.ResponseData;
+import org.purpurmc.purformance.commands.SayCommand;
 import org.purpurmc.purformance.commands.StopCommand;
 import org.purpurmc.purformance.commands.TpsCommand;
 import org.purpurmc.purformance.config.ServerProperties;
@@ -78,6 +79,7 @@ public class Server extends Thread {
 
         commandManager.register(new StopCommand());
         commandManager.register(new TpsCommand());
+        commandManager.register(new SayCommand());
 
         server.start(serverProperties.onlineMode ? serverProperties.ip : "localhost", serverProperties.port);
         logger.info("Starting Minecraft server on %s:%s".formatted(serverProperties.onlineMode ? serverProperties.ip : "localhost", serverProperties.port));
