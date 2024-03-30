@@ -13,5 +13,6 @@ public class Parser extends OptionParser {
     public Parser() {
         super();
         this.acceptsAll(Arrays.asList("nogui"), "Disables the graphical console");
+        this.allowsUnrecognizedOptions();
     }
 }
