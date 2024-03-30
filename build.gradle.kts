@@ -46,5 +46,3 @@ tasks {
         transform(Log4j2PluginsCacheFileTransformer::class.java)
     }
 }
-
-
