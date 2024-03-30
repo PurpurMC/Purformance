@@ -29,6 +29,7 @@ dependencies {
     implementation("org.jline:jline-terminal-jansi:3.21.0")
 
     implementation("net.minecrell:terminalconsoleappender:1.3.0")
+    implementation("net.sf.jopt-simple:jopt-simple:6.0-alpha-3")
 }
 
 application {

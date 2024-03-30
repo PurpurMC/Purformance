@@ -2,6 +2,7 @@ package org.purpurmc.purformance;
 
 import java.awt.GraphicsEnvironment;
 import java.util.concurrent.ExecutionException;
+import joptsimple.OptionSet;
 import org.purpurmc.purformance.config.Eula;
 import org.purpurmc.purformance.gui.Gui;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ public class Main {
     public static final Server server = new Server();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        OptionSet options = Parser.PARSER.parse(args);
+
         Thread.currentThread().setName("ServerMain");
 
         if (!Eula.checkEula()) {
@@ -20,7 +23,8 @@ public class Main {
             System.exit(1);
         }
 
-        if (!GraphicsEnvironment.isHeadless()) {
+        boolean flag = !options.has("nogui") && !options.nonOptionArguments().contains("nogui");
+        if (flag && !GraphicsEnvironment.isHeadless()) {
             Gui.createAndShow("Purformance");
         }
 
