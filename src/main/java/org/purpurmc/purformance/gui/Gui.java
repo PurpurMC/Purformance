@@ -1,6 +1,7 @@
 package org.purpurmc.purformance.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ public class Gui {
         window.setSize(400, 100);
         window.setName(title);
         window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        window.setLocationRelativeTo(null);
 
         JLabel label = new JLabel("The GUI has been disabled for performance reasons.", SwingConstants.CENTER);
         JButton button = new JButton("Understood");
