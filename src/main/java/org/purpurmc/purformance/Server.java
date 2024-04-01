@@ -42,7 +42,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        long serverStartTime = System.currentTimeMillis();
+        long serverStartTime = System.nanoTime();
         logger.info("Loading properties");
         serverProperties = new ServerProperties();
         logger.info("This server is running Purformance version git-Purformance-1.0.0 (MC: %s)".formatted(serverProperties.fastMode ? "1.8.8" : "1.20.4"));
@@ -52,7 +52,7 @@ public class Server extends Thread {
         logger.info("Generating keypair");
 
         MinecraftServer server = MinecraftServer.init();
-        MinecraftServer.setBrandName("Purformance");
+        MinecraftServer.setBrandName("Purformance - 2.0 - Toaster Support Enabled");
 
         GlobalEventHandler eventHandler = MinecraftServer.getGlobalEventHandler();
         CommandManager commandManager = MinecraftServer.getCommandManager();
